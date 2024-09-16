@@ -1,11 +1,9 @@
-
 import gradio as gr
 from transformers import pipeline
 
 # Initialize the translation pipeline with T5-base model
 translator = pipeline("translation", model="google-t5/t5-base")
 
-print('final')
 
 # Define available languages
 AVAILABLE_LANGUAGES = ["French", "German", "Romanian"]
@@ -50,28 +48,30 @@ def run_tests():
     
     return "\n".join(results)
 
-# Create Gradio interface
-with gr.Blocks() as iface:
-    gr.Markdown("# Speech Translation using T5-base")
-    gr.Markdown("Translate English text to French, German, or Romanian using the T5-base model.")
-    
-    with gr.Row():
-        input_text = gr.Textbox(label="Enter English text", placeholder="Hi, how are you?")
-        output_text = gr.Textbox(label="Translation")
-    
-    target_lang = gr.Dropdown(AVAILABLE_LANGUAGES, label="Target Language")
-    translate_btn = gr.Button("Translate")
-    
-    with gr.Row():
-        show_langs_btn = gr.Button("Show Available Languages")
-        available_langs = gr.Textbox(label="Available Languages")
-    
-    test_btn = gr.Button("Run Tests")
-    test_output = gr.Textbox(label="Test Results")
-    
-    translate_btn.click(translate, inputs=[input_text, target_lang], outputs=output_text)
-    show_langs_btn.click(show_available_languages, inputs=None, outputs=available_langs)
-    test_btn.click(run_tests, inputs=None, outputs=test_output)
+# Guard to prevent the Gradio app from running during imports (like testing)
+if __name__ == "__main__":
+    # Create Gradio interface
+    with gr.Blocks() as iface:
+        gr.Markdown("# Speech Translation using T5-base")
+        gr.Markdown("Translate English text to French, German, or Romanian using the T5-base model.")
+        
+        with gr.Row():
+            input_text = gr.Textbox(label="Enter English text", placeholder="Hi, how are you?")
+            output_text = gr.Textbox(label="Translation")
+        
+        target_lang = gr.Dropdown(AVAILABLE_LANGUAGES, label="Target Language")
+        translate_btn = gr.Button("Translate")
+        
+        with gr.Row():
+            show_langs_btn = gr.Button("Show Available Languages")
+            available_langs = gr.Textbox(label="Available Languages")
+        
+        test_btn = gr.Button("Run Tests")
+        test_output = gr.Textbox(label="Test Results")
+        
+        translate_btn.click(translate, inputs=[input_text, target_lang], outputs=output_text)
+        show_langs_btn.click(show_available_languages, inputs=None, outputs=available_langs)
+        test_btn.click(run_tests, inputs=None, outputs=test_output)
 
-# Launch the app
-iface.launch()
+    # Launch the app
+    iface.launch()
