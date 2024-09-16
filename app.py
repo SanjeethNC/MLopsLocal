@@ -6,7 +6,6 @@ from transformers import pipeline
 translator = pipeline("translation", model="google-t5/t5-base")
 
 
-
 # Define available languages
 AVAILABLE_LANGUAGES = ["French", "German", "Romanian"]
 
